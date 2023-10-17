@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   TextInput,
   TouchableOpacity,
   Text,
-  KeyboardAvoidingView,
   Image,
   StyleSheet,
   Alert,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../config";
@@ -27,6 +28,9 @@ export default function Add() {
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
+
+  //for auto scroll
+  const scrollViewRef = useRef();
 
   //for realtime db
   const [attraction, setAttraction] = useState("");
@@ -59,6 +63,7 @@ export default function Add() {
     });
     if (!result.assets[0].canceled) {
       setImage(result.assets[0].uri);
+      scrollViewRef.current.scrollToEnd({ animated: true });
     }
   };
 
@@ -149,7 +154,10 @@ export default function Add() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView
+        ref={scrollViewRef}
+        contentContainerStyle={styles.scrollContainer}
+      >
         <TextInput
           style={styles.textInput}
           placeholder="Attraction Name"
@@ -226,9 +234,13 @@ export default function Add() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "top",
-    padding: 5,
+    justifyContent: "flex-start",
+    padding: 10,
   },
+  scrollContainer: {
+    flexGrow: 1,
+  },
+
   textInput: {
     borderWidth: 1,
     borderColor: "#000",
@@ -275,12 +287,14 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingVertical: 10,
     paddingHorizontal: 40,
+    marginBottom: 10,
+    marginTop: 10,
     elevation: 3,
   },
 
   selectedImage: {
-    width: 360,
-    height: 270,
+    width: 400,
+    height: 300,
     alignSelf: "center",
     marginVertical: 10,
   },

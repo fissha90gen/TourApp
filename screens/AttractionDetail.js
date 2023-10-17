@@ -3,10 +3,12 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 const DetailScreen = ({ route }) => {
-  const destination = route.params.destination;
-  const restaurant = route.params.restaurant;
-  const bar = route.params.bar;
-  const shop = route.params.shop;
+  const attraction = route.params.attraction;
+  const category = route.params.category;
+  const description = route.params.description;
+  const restaurant = route.params.nearestRestaurant;
+  const bar = route.params.nearestBar;
+  const shop = route.params.nearestShop;
   const latitude = route.params.latitude;
   const longitude = route.params.longitude;
   const imageUrl = route.params.imageUrl;
@@ -18,12 +20,25 @@ const DetailScreen = ({ route }) => {
         style={{ height: 240, width: "100%" }}
         resizeMode="cover"
       />
-      <Text style={styles.itemDestination}>{destination}</Text>
-      <Text style={styles.itemDescription}>{restaurant}</Text>
-      <Text style={styles.itemDescription}>{bar}</Text>
-      <Text style={styles.itemDescription}>{shop}</Text>
-      <Text style={styles.itemDescription}>{latitude}</Text>
-      <Text style={styles.itemDescription}>{longitude}</Text>
+      <Text style={styles.itemAttraction}>{attraction}</Text>
+      <Text style={styles.itemDescription}>{category}</Text>
+      <Text style={styles.itemDescription}>{description}</Text>
+      <Text style={styles.itemDescription}>
+        {"Nearest Restaurant: "}
+        {restaurant}
+      </Text>
+      <Text style={styles.itemDescription}>
+        {"Nearest Bar: "}
+        {bar}
+      </Text>
+      <Text style={styles.itemDescription}>
+        {"Nearest Shop: "}
+        {shop}
+      </Text>
+      <Text style={styles.itemDescription}>
+        {"Location: "}
+        {latitude} N , {longitude} E
+      </Text>
     </View>
   );
 };
@@ -32,17 +47,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    marginHorizontal: 10,
-    paddingTop: 20,
+    paddingHorizontal: 5,
+    paddingTop: 5,
   },
-  itemDestination: {
-    fontSize: 20,
+  itemAttraction: {
+    fontSize: 22,
     color: "#000",
     paddingTop: 6,
     paddingLeft: 6,
   },
   itemDescription: {
-    fontSize: 16,
+    fontSize: 15,
     color: "#000",
     padding: 12,
   },
