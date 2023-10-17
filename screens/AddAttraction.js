@@ -4,9 +4,11 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  KeyboardAvoidingView,
   Image,
   StyleSheet,
   Alert,
+  ScrollView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../config";
@@ -27,7 +29,9 @@ export default function Add() {
   const [uploading, setUploading] = useState(false);
 
   //for realtime db
-  const [destination, setDestination] = useState("");
+  const [attraction, setAttraction] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
   const [restaurant, setRestaurant] = useState("");
   const [bar, setBar] = useState("");
   const [shop, setShop] = useState("");
@@ -58,7 +62,7 @@ export default function Add() {
     }
   };
 
-  const uploadImage = async (destinationId) => {
+  const uploadImage = async (attractionID) => {
     setUploading(true);
     const response = await fetch(image);
     const blob = await response.blob();
@@ -72,7 +76,7 @@ export default function Add() {
       setUploading(false);
       //to update data uri
       const imageUrl = await fireRef.getDownloadURL();
-      db.ref(`destinations/${destinationId}/imageUrl`).set(imageUrl);
+      db.ref(`attractions/${attractionID}/imageUrl`).set(imageUrl);
 
       Alert.alert("Upload Finished!");
 
@@ -83,9 +87,11 @@ export default function Add() {
     }
   };
 
-  const uploadDestination = () => {
+  const uploadAttraction = () => {
     if (
-      !destination ||
+      !attraction ||
+      !category ||
+      !description ||
       !restaurant ||
       !bar ||
       !shop ||
@@ -97,12 +103,16 @@ export default function Add() {
       return;
     }
 
-    // Create a new reference in the "destinations" node with a unique key
-    const newDestinationRef = db.ref("destinations").push();
+    // Create a new reference in the "attraction" node with a unique key
+    const newAttractionRef = db.ref("attractions").push();
+    const newPostKey = newAttractionRef.key;
 
     // Set the data to be saved in the database
-    const newDestinationData = {
-      destination: destination,
+    const newAttractionData = {
+      key: newPostKey,
+      attraction: attraction,
+      category: category,
+      description: description,
       nearestRestaurant: restaurant,
       nearestBar: bar,
       nearestShop: shop,
@@ -112,18 +122,20 @@ export default function Add() {
     };
 
     // Push the data to the database
-    newDestinationRef
-      .set(newDestinationData)
+    newAttractionRef
+      .set(newAttractionData)
       .then(() => {
         // Data successfully saved in the database, now you can upload the image
         // The URL of the uploaded image will be updated in the database after image upload
-        uploadImage(newDestinationRef.key);
+        uploadImage(newAttractionRef.key);
       })
       .catch((error) => {
         console.error("Error uploading destination data: ", error);
       });
 
-    setDestination("");
+    setAttraction("");
+    setCategory("");
+    setDescription("");
     setRestaurant("");
     setBar("");
     setShop("");
@@ -133,63 +145,81 @@ export default function Add() {
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.textInput}
-        placeholder="Destination Name"
-        value={destination}
-        onChangeText={(text) => setDestination(text)}
-      />
-      <TextInput
-        style={styles.textInput}
-        placeholder="Nearest Restaurant"
-        value={restaurant}
-        onChangeText={(text) => setRestaurant(text)}
-      />
-      <TextInput
-        style={styles.textInput}
-        placeholder="Nearest Bar"
-        value={bar}
-        onChangeText={(text) => setBar(text)}
-      />
-      <TextInput
-        style={styles.textInput}
-        placeholder="Nearest Shop"
-        value={shop}
-        onChangeText={(text) => setShop(text)}
-      />
-      <View style={styles.inlineInputsContainer}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={styles.container}>
         <TextInput
-          keyboardType="numeric"
-          style={[styles.textInput, styles.inlineTextInputLeft]}
-          placeholder="Latitude"
-          value={latitude}
-          onChangeText={(text) => setLatitude(text)}
+          style={styles.textInput}
+          placeholder="Attraction Name"
+          value={attraction}
+          onChangeText={(text) => setAttraction(text)}
         />
         <TextInput
-          keyboardType="numeric"
-          style={[styles.textInput, styles.inlineTextInputRight]}
-          placeholder="Longtude"
-          value={longitude}
-          onChangeText={(text) => setLongitude(text)}
+          style={styles.textInput}
+          placeholder="Attraction Catagory"
+          value={category}
+          onChangeText={(text) => setCategory(text)}
         />
-      </View>
-      <TouchableOpacity
-        style={styles.buttonSelect}
-        onPress={() => selectImage()}
-      >
-        <Text style={styles.buttonTextBlack}>Select Image</Text>
-      </TouchableOpacity>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Attraction Description"
+          value={description}
+          onChangeText={(text) => setDescription(text)}
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Nearest Restaurant"
+          value={restaurant}
+          onChangeText={(text) => setRestaurant(text)}
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Nearest Bar"
+          value={bar}
+          onChangeText={(text) => setBar(text)}
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Nearest Shop"
+          value={shop}
+          onChangeText={(text) => setShop(text)}
+        />
+        <View style={styles.inlineInputsContainer}>
+          <TextInput
+            keyboardType="numeric"
+            style={[styles.textInput, styles.inlineTextInputLeft]}
+            placeholder="Latitude"
+            value={latitude}
+            onChangeText={(text) => setLatitude(text)}
+          />
+          <TextInput
+            keyboardType="numeric"
+            style={[styles.textInput, styles.inlineTextInputRight]}
+            placeholder="Longtude"
+            value={longitude}
+            onChangeText={(text) => setLongitude(text)}
+          />
+        </View>
+        {image && (
+          <Image source={{ uri: image }} style={styles.selectedImage} />
+        )}
+        <TouchableOpacity
+          style={styles.buttonSelect}
+          onPress={() => selectImage()}
+        >
+          <Text style={styles.buttonTextBlack}>Select Image</Text>
+        </TouchableOpacity>
 
-      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
-
-      <TouchableOpacity
-        style={styles.buttonUpload}
-        onPress={() => uploadDestination()}
-      >
-        <Text style={styles.buttonTextWhite}>Upload Destination</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={styles.buttonUpload}
+          onPress={() => uploadAttraction()}
+        >
+          <Text style={styles.buttonTextWhite}>Upload Attraction</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -197,7 +227,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "top",
-    padding: 20,
+    padding: 5,
   },
   textInput: {
     borderWidth: 1,
@@ -246,8 +276,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 40,
     elevation: 3,
-    position: "absolute",
-    bottom: 40,
   },
 
   selectedImage: {

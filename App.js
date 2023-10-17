@@ -2,9 +2,9 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import Home from "./screens/Home";
-import Add from "./screens/Add";
-import Detail from "./screens/Detail";
+import Attractions from "./screens/Attractions";
+import AddAttraction from "./screens/AddAttraction";
+import AttractionDetail from "./screens/AttractionDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,19 +13,19 @@ const MyStack = () => {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{ title: "Tour Destinations", headerTitleAlign: "center" }}
+          name="Attractions"
+          component={Attractions}
+          options={{ title: "Attractions", headerTitleAlign: "center" }}
         />
         <Stack.Screen
-          name="Add"
-          component={Add}
-          options={{ title: "Add Destination", headerTitleAlign: "center" }}
+          name="AddAttraction"
+          component={AddAttraction}
+          options={{ title: "Add Attraction", headerTitleAlign: "center" }}
         />
         <Stack.Screen
-          name="Detail"
-          component={Detail}
-          options={{ title: "Destination Detail", headerTitleAlign: "center" }}
+          name="AttractionDetail"
+          component={AttractionDetail}
+          options={{ title: "Attraction Detail", headerTitleAlign: "center" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -7,6 +7,7 @@ import "firebase/compat/database";
 const firebaseConfig = {
   apiKey: "AIzaSyDGF5oWyThkQ3VKP9FexoPRWqbEReiGUA8",
   authDomain: "tourapp-e6330.firebaseapp.com",
+  databaseURL: "https://tourapp-e6330-default-rtdb.firebaseio.com",
   projectId: "tourapp-e6330",
   storageBucket: "tourapp-e6330.appspot.com",
   messagingSenderId: "902373195552",
