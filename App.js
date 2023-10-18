@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Attractions from "./screens/Attractions";
 import AddAttraction from "./screens/AddAttraction";
 import AttractionDetail from "./screens/AttractionDetail";
+import Map from "./screens/Map";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,11 @@ const MyStack = () => {
           name="AttractionDetail"
           component={AttractionDetail}
           options={{ title: "Attraction Detail", headerTitleAlign: "center" }}
+        />
+        <Stack.Screen
+          name="Map"
+          component={Map}
+          options={{ title: "Location", headerTitleAlign: "center" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

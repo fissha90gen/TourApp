@@ -6,6 +6,7 @@ import {
   Text,
   Image,
   StyleSheet,
+  TouchableWithoutFeedback,
   Alert,
   ScrollView,
   KeyboardAvoidingView,
@@ -13,6 +14,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../config";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 //for realtimedb
 import "firebase/compat/database";
@@ -209,6 +211,14 @@ export default function Add() {
             value={longitude}
             onChangeText={(text) => setLongitude(text)}
           />
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate("AttractionDetail", item)}
+          >
+            <Image
+              style={styles.textInput}
+              source={require("../assets/location.png")}
+            />
+          </TouchableWithoutFeedback>
         </View>
         {image && (
           <Image source={{ uri: image }} style={styles.selectedImage} />
@@ -254,11 +264,10 @@ const styles = StyleSheet.create({
   },
   inlineTextInputLeft: {
     flex: 1,
-    marginRight: 10,
   },
   inlineTextInputRight: {
     flex: 1,
-    marginLeft: 10,
+    marginHorizontal: 10,
   },
 
   buttonSelect: {
