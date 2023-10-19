@@ -14,12 +14,11 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../config";
-import Icon from "react-native-vector-icons/FontAwesome";
 
 //for realtimedb
 import "firebase/compat/database";
 
-export default function Add() {
+export default function AddAttraction({ navigation, route }) {
   //for making  keyboard numeric for latitude and longtude
   const [numberInput, setNumberInput] = useState("");
   const handleTextChange = (text) => {
@@ -150,6 +149,12 @@ export default function Add() {
     setLongitude("");
     setImage(null);
   };
+  useEffect(() => {
+    if (route.params && route.params.coordinate) {
+      setLatitude(route.params.coordinate.lat.toString());
+      setLongitude(route.params.coordinate.long.toString());
+    }
+  }, [route.params]);
 
   return (
     <KeyboardAvoidingView
@@ -211,9 +216,7 @@ export default function Add() {
             value={longitude}
             onChangeText={(text) => setLongitude(text)}
           />
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate("AttractionDetail", item)}
-          >
+          <TouchableWithoutFeedback onPress={() => navigation.navigate("Map")}>
             <Image
               style={styles.textInput}
               source={require("../assets/location.png")}
@@ -247,6 +250,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     padding: 10,
   },
+
   scrollContainer: {
     flexGrow: 1,
   },

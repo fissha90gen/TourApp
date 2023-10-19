@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import MapView, { Callout, Marker } from "react-native-maps";
 
 const DetailScreen = ({ route }) => {
   const attraction = route.params.attraction;
@@ -9,8 +10,8 @@ const DetailScreen = ({ route }) => {
   const restaurant = route.params.nearestRestaurant;
   const bar = route.params.nearestBar;
   const shop = route.params.nearestShop;
-  const latitude = route.params.latitude;
-  const longitude = route.params.longitude;
+  const lat = parseFloat(route.params.latitude); // Convert to a number
+  const long = parseFloat(route.params.longitude); // Convert to a number
   const imageUrl = route.params.imageUrl;
 
   return (
@@ -35,10 +36,20 @@ const DetailScreen = ({ route }) => {
         {"Nearest Shop: "}
         {shop}
       </Text>
-      <Text style={styles.itemDescription}>
-        {"Location: "}
-        {latitude} N , {longitude} E
-      </Text>
+      <MapView
+        style={{ ...styles.map, flex: 1 }}
+        initialRegion={{
+          latitude: lat,
+          longitude: long,
+          latitudeDelta: 4,
+          longitudeDelta: 4,
+        }}
+      >
+        <Marker
+          coordinate={{ latitude: lat, longitude: long }}
+          draggable={true}
+        ></Marker>
+      </MapView>
     </View>
   );
 };
@@ -49,17 +60,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingHorizontal: 5,
     paddingTop: 5,
+    paddingBottom: 5,
+  },
+  map: {
+    width: "100%",
   },
   itemAttraction: {
     fontSize: 22,
     color: "#000",
     paddingTop: 6,
-    paddingLeft: 6,
   },
   itemDescription: {
     fontSize: 15,
     color: "#000",
-    padding: 12,
+    paddingVertical: 3,
+    paddingLeft: 5,
   },
 });
 
