@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import MapView, { Callout, Marker } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
+import axios from "axios";
 
 const DetailScreen = ({ route }) => {
   const attraction = route.params.attraction;
@@ -14,6 +14,26 @@ const DetailScreen = ({ route }) => {
   const long = parseFloat(route.params.longitude); // Convert to a number
   const imageUrl = route.params.imageUrl;
 
+  const apiKey = "2dee08cbbda3fddb58e11cf8aa60b66a";
+  const latitude = lat;
+  const longitude = long;
+  const units = "metric";
+
+  const [weatherData, setWeatherData] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=${units}&appid=${apiKey}`
+      )
+      .then((response) => {
+        setWeatherData(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
   return (
     <View style={styles.container}>
       <Image
@@ -21,7 +41,26 @@ const DetailScreen = ({ route }) => {
         style={{ height: 240, width: "100%" }}
         resizeMode="cover"
       />
-      <Text style={styles.itemAttraction}>{attraction}</Text>
+      <View style={styles.inlineAttractionAndWeatherContainer}>
+        <Text style={styles.itemAttraction}>{attraction}</Text>
+        <View style={styles.inlineWeathercontainer}>
+          <Text style={styles.inlineTemprature}>
+            {weatherData
+              ? `${Math.round(weatherData.main.temp)}°C`
+              : "Loading..."}
+          </Text>
+          <View style={styles.inlineTextContainerVertical}>
+            <Text style={styles.inlineWeatherDescription}>
+              {weatherData ? weatherData.weather[0].description : "Loading..."}
+            </Text>
+            <Text style={styles.inlineWeatherDescription}>
+              {weatherData
+                ? `Humidity: ${weatherData.main.humidity}%`
+                : "Loading..."}
+            </Text>
+          </View>
+        </View>
+      </View>
       <Text style={styles.itemDescription}>{category}</Text>
       <Text style={styles.itemDescription}>{description}</Text>
       <Text style={styles.itemDescription}>
@@ -66,15 +105,49 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   itemAttraction: {
-    fontSize: 22,
+    fontSize: 26,
     color: "#000",
-    paddingTop: 6,
+    flex: 6,
   },
   itemDescription: {
     fontSize: 15,
     color: "#000",
     paddingVertical: 3,
     paddingLeft: 5,
+  },
+  inlineTextContainerHorizontal: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 5,
+  },
+
+  inlineAttractionAndWeatherContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 5,
+  },
+  inlineWeathercontainer: {
+    flexDirection: "row",
+    flex: 5,
+    justifyContent: "space-between",
+    padding: 2,
+    borderWidth: 1,
+    borderColor: "#f70",
+    borderRadius: 10,
+  },
+  inlineTextContainerVertical: {
+    flexDirection: "column",
+    flex: 2,
+  },
+  inlineTemprature: {
+    flex: 1,
+    fontSize: 26,
+    color: "#f70",
+  },
+  inlineWeatherDescription: {
+    flex: 1,
+    fontSize: 14,
+    paddingLeft: 12,
   },
 });
 

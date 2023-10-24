@@ -11,6 +11,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Picker,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../config";
@@ -177,6 +178,7 @@ export default function AddAttraction({ navigation, route }) {
           value={category}
           onChangeText={(text) => setCategory(text)}
         />
+
         <TextInput
           style={styles.textInput}
           placeholder="Attraction Description"
