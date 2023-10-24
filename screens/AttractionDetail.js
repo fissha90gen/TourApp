@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flex: 5,
     justifyContent: "space-between",
-    padding: 2,
+    padding: 3,
     borderWidth: 1,
     borderColor: "#f70",
     borderRadius: 10,
