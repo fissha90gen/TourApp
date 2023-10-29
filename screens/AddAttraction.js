@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import * as Progress from 'react-native-progress';
 import {
   View,
   TextInput,
@@ -30,6 +31,8 @@ export default function AddAttraction({ navigation, route }) {
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadingProgress, setUploadingProgress] = useState(false);
+
 
   //for auto scroll
   const scrollViewRef = useRef();
@@ -71,6 +74,8 @@ export default function AddAttraction({ navigation, route }) {
 
   const uploadImage = async (attractionID) => {
     setUploading(true);
+    setUploadingProgress(true);
+    scrollViewRef.current.scrollToEnd({ animated: true });
     const response = await fetch(image);
     const blob = await response.blob();
     const filename =
@@ -85,12 +90,23 @@ export default function AddAttraction({ navigation, route }) {
       const imageUrl = await fireRef.getDownloadURL();
       db.ref(`attractions/${attractionID}/imageUrl`).set(imageUrl);
 
-      Alert.alert("Upload Finished!");
+      setUploadingProgress(false);
+      Alert.alert("Uploaded!");
 
+      setAttraction("");
+      setCategory("");
+      setDescription("");
+      setRestaurant("");
+      setBar("");
+      setShop("");
+      setLatitude("");
+      setLongitude("");
       setImage(null);
+      
     } catch (e) {
       console.log(e);
       setUploading(false);
+      setUploadingProgress(false);
     }
   };
 
@@ -140,15 +156,7 @@ export default function AddAttraction({ navigation, route }) {
         console.error("Error uploading destination data: ", error);
       });
 
-    setAttraction("");
-    setCategory("");
-    setDescription("");
-    setRestaurant("");
-    setBar("");
-    setShop("");
-    setLatitude("");
-    setLongitude("");
-    setImage(null);
+
   };
   useEffect(() => {
     if (route.params && route.params.coordinate) {
@@ -241,6 +249,19 @@ export default function AddAttraction({ navigation, route }) {
         >
           <Text style={styles.buttonTextWhite}>Upload Attraction</Text>
         </TouchableOpacity>
+
+        {uploadingProgress && (
+          <Progress.Circle
+            size={56}
+            borderWidth={3}
+            borderColor={"#0f9170"}
+            alignItems="center"
+            marginTop={20}
+            marginBottom={20}
+            indeterminate={true}
+          />
+        )}
+
       </ScrollView>
     </KeyboardAvoidingView>
   );

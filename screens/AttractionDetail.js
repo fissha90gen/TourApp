@@ -45,18 +45,14 @@ const DetailScreen = ({ route }) => {
         <Text style={styles.itemAttraction}>{attraction}</Text>
         <View style={styles.inlineWeathercontainer}>
           <Text style={styles.inlineTemprature}>
-            {weatherData
-              ? `${Math.round(weatherData.main.temp)}°C`
-              : "Loading..."}
+            {weatherData ? `${Math.round(weatherData.main.temp)}°C` : "..."}
           </Text>
           <View style={styles.inlineTextContainerVertical}>
             <Text style={styles.inlineWeatherDescription}>
-              {weatherData ? weatherData.weather[0].description : "Loading..."}
+              {weatherData ? weatherData.weather[0].description : "..."}
             </Text>
             <Text style={styles.inlineWeatherDescription}>
-              {weatherData
-                ? `Humidity: ${weatherData.main.humidity}%`
-                : "Loading..."}
+              {weatherData ? `Humidity: ${weatherData.main.humidity}%` : "..."}
             </Text>
           </View>
         </View>
