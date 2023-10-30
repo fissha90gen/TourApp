@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as Progress from 'react-native-progress';
 import {
   StyleSheet,
   Text,
@@ -60,7 +61,17 @@ const Attractions = ({ navigation }) => {
         renderItem={renderItem}
         keyExtractor={(item) => item.key}
         ListEmptyComponent={
-          <Text style={styles.itemAttraction}>Loading...</Text>
+          <View style={styles.emptyListContainer}>
+            <Progress.Circle
+              size={56}
+              borderWidth={3}
+              borderColor={"#0f9170"}
+              alignItems="center"
+              marginTop={20}
+              marginBottom={20}
+              indeterminate={true}
+            />
+          </View>
         }
         vertical
         style={{ flex: 1 }}
@@ -120,5 +131,10 @@ const styles = StyleSheet.create({
   addButtonLabel: {
     fontSize: 40,
     color: "white",
+  },
+  emptyListContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
