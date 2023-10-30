@@ -16,17 +16,20 @@ const MyStack = () => {
         <Stack.Screen
           name="Attractions"
           component={Attractions}
-          options={{ title: "Attractions", headerTitleAlign: "center" }}
+          options={{ title: "Attractions", headerTitleAlign: "center",  }}
         />
         <Stack.Screen
           name="AddAttraction"
           component={AddAttraction}
-          options={{ title: "Add Attraction", headerTitleAlign: "center" }}
+          options={{ title: "Add Attraction", headerTitleAlign: "center",  }}
+
         />
         <Stack.Screen
           name="AttractionDetail"
           component={AttractionDetail}
           options={{ title: "Attraction Detail", headerTitleAlign: "center" }}
+          
+
         />
         <Stack.Screen
           name="Map"

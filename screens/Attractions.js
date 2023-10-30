@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as Progress from 'react-native-progress';
+import { FontAwesome } from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
+  TextInput,
   View,
   TouchableOpacity,
   SafeAreaView,
@@ -14,7 +16,18 @@ import { firebase } from "../config";
 
 const Attractions = ({ navigation }) => {
   const [attractions, setAttractions] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const db = firebase.database();
+  const textInputRef = useRef(null);
+
+  const clearSearchInput = () => {
+    setSearchQuery("");
+    if (textInputRef.current) {
+      textInputRef.current.blur(); // Remove focus
+    }
+  };
+
+
 
   function fetchAttractions() {
     const starCountRef = db.ref("attractions");
@@ -32,6 +45,8 @@ const Attractions = ({ navigation }) => {
   useEffect(() => {
     fetchAttractions();
   }, []);
+
+
 
   const renderItem = ({ item }) => (
     <TouchableWithoutFeedback
@@ -53,11 +68,45 @@ const Attractions = ({ navigation }) => {
     </TouchableWithoutFeedback>
   );
 
+  const filteredAttractions = attractions.filter((item) =>
+    item.attraction.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <View style={styles.mainContainer}>
       <SafeAreaView />
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search Attractions"
+          onChangeText={(text) => setSearchQuery(text)}
+          value={searchQuery}
+          ref={textInputRef}
+        />
+        {searchQuery.length > 0 && (
+          <TouchableOpacity
+            style={styles.searchIcon}
+            onPress={clearSearchInput}
+          >
+            <FontAwesome name="times" size={24} color="#444"  />
+          </TouchableOpacity>
+        )}
+         {searchQuery.length === 0 && (
+          <TouchableOpacity
+            style={styles.searchIcon}
+            onPress={() => {
+              if (textInputRef.current) {
+                textInputRef.current.focus(); // Focus the input
+              }
+            }}
+          >
+            <FontAwesome name="search" size={24} color="#444" />
+          </TouchableOpacity>
+        )}
+      </View>
+
       <FlatList
-        data={attractions}
+        data={filteredAttractions}
         renderItem={renderItem}
         keyExtractor={(item) => item.key}
         ListEmptyComponent={
@@ -91,6 +140,14 @@ const Attractions = ({ navigation }) => {
 
 export default Attractions;
 
+
+
+
+
+
+
+
+
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -100,7 +157,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#afcfef",
     borderRadius: 10,
-    marginVertical: 5,
+    marginBottom: 5,
     marginHorizontal: 8,
     paddingBottom: 16,
     flex: 1,
@@ -136,5 +193,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 6,
+    elevation:10,
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    marginHorizontal: 8,
+    borderRadius: 10,
+  },
+  searchIcon: {
+    padding: 8,
+  },
+  searchInput: {
+    padding: 3,
+    flex: 1,
+    textAlign: "center",
+    paddingLeft: 30,
+    fontSize: 18,
   },
 });
