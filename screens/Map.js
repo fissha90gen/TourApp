@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MapView, { Callout, Marker } from "react-native-maps";
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 
-export default function App({ navigation }) {
+export default function Map({ navigation }) {
   const [coordinate, setCoordinate] = useState({
     lat: 9.033404,
     long: 38.751041,

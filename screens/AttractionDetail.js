@@ -58,7 +58,9 @@ const DetailScreen = ({ route }) => {
         </View>
       </View>
       <Text style={styles.itemDescription}>{category}</Text>
-      <Text style={styles.itemDescription}>{description}</Text>
+      <Text style={styles.itemDescription}
+        numberOfLines={3}
+        ellipsizeMode="tail">{description}</Text>
       <Text style={styles.itemDescription}>
         {"Nearest Restaurant: "}
         {restaurant}

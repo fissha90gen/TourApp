@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as Progress from 'react-native-progress';
 import { FontAwesome } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import {
   StyleSheet,
   Text,
@@ -45,8 +46,7 @@ const Attractions = ({ navigation }) => {
   useEffect(() => {
     fetchAttractions();
   }, []);
-
-
+  
 
   const renderItem = ({ item }) => (
     <TouchableWithoutFeedback
@@ -126,27 +126,12 @@ const Attractions = ({ navigation }) => {
         style={{ flex: 1 }}
       />
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate("AddAttraction")}
-        >
-          <Text style={styles.addButtonLabel}>+</Text>
-        </TouchableOpacity>
-      </View>
+      
     </View>
   );
 };
 
 export default Attractions;
-
-
-
-
-
-
-
-
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -172,23 +157,7 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     alignItems: "center",
   },
-  buttonContainer: {
-    position: "absolute",
-    bottom: 20,
-    alignSelf: "center",
-  },
-  addButton: {
-    backgroundColor: "#000",
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  addButtonLabel: {
-    fontSize: 40,
-    color: "white",
-  },
+  
   emptyListContainer: {
     flex: 1,
     justifyContent: "center",
