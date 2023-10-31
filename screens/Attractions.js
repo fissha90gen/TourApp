@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as Progress from 'react-native-progress';
 import { FontAwesome } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import {
   StyleSheet,
   Text,

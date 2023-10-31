@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
@@ -65,21 +65,19 @@ const TipsStack = () => {
 };
 
 
-const screenOptions = {
-  tabBarShowLabel: false,
-  tabBarStyle: {
-    position: "absolute",
-    bottom: 0,
-    elevation: 5,
-    height: 50,
-    backgroundColor: "#fff", 
-  },
-};
-
 const MyStack = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator screenOptions={screenOptions}>
+      <Tab.Navigator mscreenOptions={{
+          tabBarShowLabel: false,
+          tabBarStyle: {
+            position: "absolute",
+            bottom: 0,
+            elevation: 5,
+            height: 60, 
+            backgroundColor: "#fff",
+          },
+        }}>
         <Tab.Screen
           name="Attractions"
           component={AttractionStack}
@@ -92,12 +90,12 @@ const MyStack = () => {
           }}
         />
         <Tab.Screen
-          name="AddAttraction"
+          name="Add Attraction"
           component={AddAttractionStack}
           options={{
             tabBarIcon: ({ focused }) => (
               <View style={{ alignItems: "center", justifyContent: "center" }}>
-                <MaterialIcons name="add-circle" size={30} color={focused ? "#0fb170" : "#222"} />
+                <MaterialIcons name="add-circle" size={26} color={focused ? "#0fb170" : "#222"} />
               </View>
             ),
           }}

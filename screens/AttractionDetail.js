@@ -91,6 +91,18 @@ const DetailScreen = ({ route }) => {
   );
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

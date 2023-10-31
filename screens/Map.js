@@ -9,7 +9,7 @@ export default function Map({ navigation }) {
   });
 
   const handleSelectLocation = () => {
-    navigation.navigate("AddAttraction", { coordinate });
+    navigation.navigate("AddAttraction Screen", { coordinate });
   };
   return (
     <View style={styles.container}>
